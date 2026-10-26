@@ -1,0 +1,32 @@
+# Publishes to npmjs.com when a `vX.Y.Z` tag is pushed. The tag's version
+# must match package.json's "version".
+#
+# Mirrors @iest-tecnologia/auth: uses trusted publishing (OIDC) once this
+# package exists on npm and GitHub is registered as its trusted publisher,
+# configured for "npm stage publish" only — a maintainer then runs
+# `npm stage approve <stage-id>` with 2FA to make it public.
+name: Publish
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Check tag matches package version
+        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm stage publish

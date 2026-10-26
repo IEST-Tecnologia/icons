@@ -1,0 +1,36 @@
+{
+  "name": "@iest-tecnologia/icons",
+  "version": "0.1.0",
+  "description": "Shared stroke icon set and the IEST logo mark, for IEST's Next.js apps.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IEST-Tecnologia/icons.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
