@@ -36,7 +36,18 @@ to `src/index.ts`'s barrel export.
 
 ## Releasing
 
-Mirrors `@iest-tecnologia/auth`: bump `version` in `package.json`, push a
-`v<version>` tag, and the `publish` workflow stages the release to npm via
-trusted publishing (OIDC) — a maintainer then runs
-`npm stage approve <stage-id>` with 2FA to make it public.
+```bash
+npm version patch   # or minor / major — bumps package.json, commits, tags v<version>
+git push --follow-tags
+```
+
+The tag push triggers the `publish` workflow (`npm ci` → `npm run typecheck`
+→ `npm stage publish`), which stages the release to npm via trusted
+publishing (OIDC). A maintainer then runs `npm stage approve <stage-id>`
+with 2FA to make it public.
+
+First release of a brand-new package is the one exception: npm's trusted
+publisher can only be configured for a package that already exists on the
+registry, so v1 has to be a plain `npm publish --access public` from a
+maintainer's machine *before* the trusted publisher is added on npmjs.com.
+Every release after that uses the tag-push flow above.
